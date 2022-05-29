@@ -1,49 +1,50 @@
 import Header from "../Header";
 import Footer from '../Footer';
 import styled from 'styled-components';
-import Lixeirinha from '../../../assets/images/lixeira.png';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
+import axios from "axios";
+import NovoHabito from "./NovoHabito";
+import SeuHabito from "./SeuHabito";
 
-export default function Habitos({token}) {
+export default function Habitos({ token }) {
+    const [seusHabitos, setSeusHabitos] = useState('');
+    const [addHabito, setAddHabito] = useState(false);
+    function toggleAdd() {
+        if (addHabito) { setAddHabito(false) }
+        else { setAddHabito(true) }
+    }
+
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const promise = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', config);
+        promise.then(resposta => {
+            console.log(resposta);
+            setSeusHabitos(resposta.data);
+            console.log(seusHabitos);
+        });
+        promise.catch(resposta => alert('ERRO NO GET'));
+    }, []);
+
     return (
         <>
             <Header />
             <Container>
                 <header>
                     <h1>Meus hábitos</h1>
-                    <Add><p>+</p></Add>
+                    <Add onClick={toggleAdd}><p>+</p></Add>
                 </header>
+                {(addHabito) ? (<NovoHabito toggleAdd={toggleAdd} token={token} setSeusHabitos={setSeusHabitos}/>) : <></>}
 
-                <NovoHabito>
-                    <input type='text' placeholder="  nome do hábito" />
-                    <WeekDay>D</WeekDay>
-                    <WeekDay>S</WeekDay>
-                    <WeekDay>T</WeekDay>
-                    <WeekDay>Q</WeekDay>
-                    <WeekDay>Q</WeekDay>
-                    <WeekDay>S</WeekDay>
-                    <WeekDay>S</WeekDay>
-                    <div>
-                        <Cancelar>Cancelar</Cancelar>
-                        <Salvar>Salvar</Salvar>
-                    </div>
-                </NovoHabito>
-
-                <SeuHabito>
-                    <div>
-                        <h2>Hábito aqui</h2>
-                        <img src={Lixeirinha} alt="Lixeira" />
-                    </div>
-                    <WeekDay>D</WeekDay>
-                    <WeekDay>S</WeekDay>
-                    <WeekDay>T</WeekDay>
-                    <WeekDay>Q</WeekDay>
-                    <WeekDay>Q</WeekDay>
-                    <WeekDay>S</WeekDay>
-                    <WeekDay>S</WeekDay>
-                </SeuHabito>
-
-                <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
+                {(seusHabitos.length > 0) ?
+                    seusHabitos.map((item,index) => {
+                        return (<SeuHabito key={index}/>)
+                    }) :
+                    <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
+                }
             </Container>
             <Footer />
         </>
@@ -103,56 +104,4 @@ const Add = styled.div`
         line-height: 34px;
         padding-bottom: 6px;
     }
-`;
-const WeekDay = styled.button`
-    width: 30px;
-    height: 30px;
-    background: #FFFFFF;
-    border: 1px solid #D5D5D5;
-    border-radius: 5px;
-    font-size: 19.976px;
-    line-height: 25px;
-    color: #DBDBDB;
-    margin: 8px 4px 0 0;        
-`;
-const NovoHabito = styled.section`
-    div{
-        display: flex;
-        justify-content: end;
-        align-items: center;
-        padding-top: 29px;
-    }
-`;
-const SeuHabito = styled.section`
-    h2{
-        font-size: 19.976px;
-        line-height: 25px;
-        color: #666666;
-    }
-    div{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-`;
-const Cancelar = styled.p`
-    font-size: 15.976px;
-    line-height: 20px;
-    text-align: center;
-    color: #52B6FF;
-    padding-right: 23px;
-    :hover{
-        cursor: pointer;
-    }
-`;
-const Salvar = styled.button`
-    width: 84px;
-    height: 35px;
-    background: #52B6FF;
-    border-radius: 4.63636px;
-    border: none;
-    font-size: 15.976px;
-    line-height: 20px;
-    text-align: center;
-    color: #FFFFFF;
 `;
