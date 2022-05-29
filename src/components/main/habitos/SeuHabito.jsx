@@ -1,21 +1,25 @@
 import styled from 'styled-components';
 import Lixeirinha from '../../../assets/images/lixeira.png';
-import WeekDay from './WeekDay';
+import Week from './Week';
 
-export default function SeuHabito() {
+export default function SeuHabito({ name, days, id }) {
+    const week = [0, 1, 2, 3, 4, 5, 6];
     return (
         <Habito>
             <div>
-                <h2>Hábito aqui</h2>
+                <h2>{name}</h2>
                 <img src={Lixeirinha} alt="Lixeira" />
             </div>
-            <WeekDay>D</WeekDay>
-            <WeekDay>S</WeekDay>
-            <WeekDay>T</WeekDay>
-            <WeekDay>Q</WeekDay>
-            <WeekDay>Q</WeekDay>
-            <WeekDay>S</WeekDay>
-            <WeekDay>S</WeekDay>
+            <article>
+                {week.map((item, index) => {
+                    const status = days.some(day => { return (item === day) });
+                    if (status) {
+                        return (<Week selected={true} letter={index} key={index} />)
+                    } else {
+                        return (<Week selected={false} letter={index} key={index} />)
+                    }
+                })}
+            </article>
         </Habito>
     )
 }
@@ -31,15 +35,7 @@ const Habito = styled.section`
         justify-content: space-between;
         align-items: center;
     }
-`;
-const Day = styled.div`
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    font-size: 19.976px;
-    line-height: 25px;
-    margin: 8px 4px 0 0;        
-    border: 1px solid ${props => props.borderColor};
-    background:  ${props => props.background};
-    color: ${props => props.textColor};
+    article{
+        display: flex;
+    }
 `;

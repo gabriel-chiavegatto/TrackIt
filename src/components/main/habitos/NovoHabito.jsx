@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import WeekDay from "./WeekDay";
 import axios from "axios";
 
-export default function NovoHabito({ token, toggleAdd, setSeusHabitos}) {
+export default function NovoHabito({ token, toggleAdd, setSeusHabitos }) {
     const [nomeHabito, setNomeHabito] = useState('');
     const [days, setDays] = useState([]);
 
@@ -17,6 +17,7 @@ export default function NovoHabito({ token, toggleAdd, setSeusHabitos}) {
             name: nomeHabito,
             days: days
         }
+
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', obj, config);
         promise.then(resposta => {
             console.log(resposta);
@@ -24,14 +25,15 @@ export default function NovoHabito({ token, toggleAdd, setSeusHabitos}) {
             refresf.then(resposta => {
                 console.log(resposta);
                 setSeusHabitos(resposta.data);
+                toggleAdd();
             });
             refresf.catch(resposta => alert('ERRO NO GET'));
 
-
-
-
         });
-        promise.catch(resposta => console.log(resposta));
+        promise.catch(resposta => {
+            console.log(resposta);
+            alert('Erro ao recarregar')
+        });
 
     }
 

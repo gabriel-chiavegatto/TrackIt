@@ -40,8 +40,8 @@ export default function Habitos({ token }) {
                 {(addHabito) ? (<NovoHabito toggleAdd={toggleAdd} token={token} setSeusHabitos={setSeusHabitos}/>) : <></>}
 
                 {(seusHabitos.length > 0) ?
-                    seusHabitos.map((item,index) => {
-                        return (<SeuHabito key={index}/>)
+                    seusHabitos.map((item) => {
+                        return (<SeuHabito name={item.name} days={item.days} id={item.id} key={item.id}/>)
                     }) :
                     <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
                 }

@@ -14,9 +14,8 @@ export default function WeekDay({ id, setDays, days, children }) {
             setBorderColor('#D5D5D5');
             setTextColor('#DBDBDB');
             setSelected(false);
-            const newDays = days.filter(item=>{return(item!=id)});
+            const newDays = days.filter(item=>{return(item!==id)});
             setDays(newDays);
-            console.log(days);
         } else {
             setBackground('#CFCFCF');
             setBorderColor('#CFCFCF');
