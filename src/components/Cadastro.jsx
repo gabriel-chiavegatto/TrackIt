@@ -1,17 +1,42 @@
 import Logo from '../assets/images/logo.png';
 import styled from 'styled-components';
+import { useState } from 'react';
+import { Link, useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
-export default function Cadastro(){
-    return(
+export default function Cadastro() {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [image, setImage] = useState('');
+    const navigate = useNavigate();
+
+    function cadastrar() {
+        const form = {
+            email: email,
+            name: name,
+            image: image,
+            password: password
+        }
+        const promisse = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', form);
+        promisse.then(() => {
+            console.log('LOGIN EFETUADO COM SUCESSO');
+            navigate('/');
+        });
+        promisse.catch((response)=>alert('POR FAVOR PREENCHA OS DADOS CORRETAMENTE'));
+    }
+
+    return (
         <Align>
             <div>
                 <section><img src={Logo} alt="logo-trackit" /></section>
-                <input placeholder='  email' type='text' />
-                <input placeholder='  senha' type='password' />
-                <input placeholder='  nome' type='text' />
-                <input placeholder='  foto' type='text' />
-                <button>Cadastrar</button>
-                <p>Já tem uma conta? Faça login!</p>
+                <input placeholder='  email' type='email' value={email} onChange={e => setEmail(e.target.value)} />
+                <input placeholder='  senha' type='password' value={password} onChange={e => setPassword(e.target.value)} />
+                <input placeholder='  nome' type='text' value={name} onChange={e => setName(e.target.value)} />
+                <input placeholder='  foto' type='url' value={image} onChange={e => setImage(e.target.value)} />
+                <button onClick={cadastrar}>Cadastrar</button>
+                <Link to='/'><p>Já tem uma conta? Faça login!</p></Link>
             </div>
         </Align>
     )

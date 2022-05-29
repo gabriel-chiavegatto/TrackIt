@@ -3,7 +3,7 @@ import Header from "../Header";
 import styled from 'styled-components';
 import Vector from '../../../assets/images/vector.png';
 
-export default function Hoje() {
+export default function Hoje({token}) {
     return (
         <>
             <Header />

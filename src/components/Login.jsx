@@ -1,15 +1,36 @@
 import Logo from '../assets/images/logo.png';
 import styled from 'styled-components';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function Login() {
+export default function Login({setToken}) {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    function logar() {
+        const form = {
+            email: email,
+            password: password
+        }
+        const promisse = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', form);
+        promisse.then(resposta=>{
+            console.log(resposta);
+            setToken(resposta.data.token);
+            navigate('/habitos');
+        });
+        promisse.catch(resposta=>alert('POR FAVOR PREENCHA OS DADOS CORRETAMENTE'));
+    }
+
     return (
         <Align>
             <div>
                 <section><img src={Logo} alt="logo-trackit" /></section>
-                <input placeholder='  email' type='text' />
-                <input placeholder='  senha' type='password' />
-                <button>Entrar</button>
-                <p>Não tem uma conta? Cadastre-se</p>
+                <input placeholder='  email' type='email' value={email} onChange={e => setEmail(e.target.value)} />
+                <input placeholder='  senha' type='password' value={password} onChange={e => setPassword(e.target.value)} />
+                <button onClick={logar}>Entrar</button>
+                <Link to='/cadastro'><p>Não tem uma conta? Cadastre-se</p></Link>
             </div>
         </Align>
     )

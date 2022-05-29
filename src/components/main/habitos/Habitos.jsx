@@ -2,8 +2,9 @@ import Header from "../Header";
 import Footer from '../Footer';
 import styled from 'styled-components';
 import Lixeirinha from '../../../assets/images/lixeira.png';
+import {useState, useEffect} from 'react';
 
-export default function Habitos() {
+export default function Habitos({token}) {
     return (
         <>
             <Header />
