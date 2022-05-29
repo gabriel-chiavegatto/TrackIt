@@ -4,8 +4,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Cadastro from './Cadastro';
-import Habitos from './main/Habitos';
-import Hoje from './main/Hoje';
+import Habitos from './main/habitos/Habitos';
+import Hoje from './main/hoje/Hoje';
 import Historico from './main/Historico';
 
 
