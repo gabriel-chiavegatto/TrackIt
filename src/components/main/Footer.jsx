@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import DetalheButton from '../../assets/images/detalhe-button.png';
+import { Link } from 'react-router-dom';
 export default function Footer() {
     return (
         <Nav>
-            <p>Hábitos</p>
+            <div><Link to='/habitos'><p>Hábitos</p></Link></div>
             <ButtonHoje>
-                <article>
+                <Link to='/hoje'><article>
                     <p>Hoje</p>
                     <img src={DetalheButton} alt="." />
-                </article>
+                </article></Link>
             </ButtonHoje>
-            <p>Histórico</p>
+            <div><Link to='/historico'><p>Histórico</p></Link></div>
         </Nav>
     )
 }
@@ -31,10 +32,15 @@ const Nav = styled.footer`
         font-size: 17.976px;
         line-height: 22px;
         color: #52B6FF;
+        text-align: center;
+    }
+    div{
+        width: 33%;
+        display: flex;
+        justify-content: center;
     }
 `;
 const ButtonHoje = styled.div`
-    width: 33%;
     display: flex;
     justify-content: center;
     article{
