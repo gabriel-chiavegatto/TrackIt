@@ -1,17 +1,38 @@
 import styled from 'styled-components';
 import Lixeirinha from '../../../assets/images/lixeira.png';
 import Week from './Week';
+import axios from 'axios';
 
-export default function SeuHabito({ name, days, id }) {
-    const week = [0, 1, 2, 3, 4, 5, 6];
+export default function SeuHabito({ setSeusHabitos, token, name, days, id }) {
+    const weekIndex = [0, 1, 2, 3, 4, 5, 6];
+
+    function deletarHabito() {
+        console.log('clicou para deletar');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const deleted = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config);
+        deleted.then(() => {
+            const refresf = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', config);
+            refresf.then(resposta => {
+                console.log(resposta);
+                setSeusHabitos(resposta.data);
+            });
+            refresf.catch(resposta => alert('ERRO NO GET'));
+        });
+
+    }
+
     return (
         <Habito>
             <div>
                 <h2>{name}</h2>
-                <img src={Lixeirinha} alt="Lixeira" />
+                <img src={Lixeirinha} alt="Lixeira" onClick={deletarHabito} />
             </div>
             <article>
-                {week.map((item, index) => {
+                {weekIndex.map((item, index) => {
                     const status = days.some(day => { return (item === day) });
                     if (status) {
                         return (<Week selected={true} letter={index} key={index} />)

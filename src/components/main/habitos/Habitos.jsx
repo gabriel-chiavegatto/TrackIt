@@ -5,8 +5,12 @@ import { useState, useEffect } from 'react';
 import axios from "axios";
 import NovoHabito from "./NovoHabito";
 import SeuHabito from "./SeuHabito";
+import { useContext } from "react";
+import ConfigContext from "../../../context/ConfigContext";
 
-export default function Habitos({ token }) {
+export default function Habitos({token}) {
+
+    // const {token} = useContext(ConfigContext);
     const [seusHabitos, setSeusHabitos] = useState('');
     const [addHabito, setAddHabito] = useState(false);
     function toggleAdd() {
@@ -41,7 +45,7 @@ export default function Habitos({ token }) {
 
                 {(seusHabitos.length > 0) ?
                     seusHabitos.map((item) => {
-                        return (<SeuHabito name={item.name} days={item.days} id={item.id} key={item.id}/>)
+                        return (<SeuHabito token={token} setSeusHabitos={setSeusHabitos} name={item.name} days={item.days} id={item.id} key={item.id}/>)
                     }) :
                     <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
                 }
