@@ -11,6 +11,8 @@ import ConfigContext from "../../../context/ConfigContext";
 export default function Habitos() {
 
     const {token} = useContext(ConfigContext);
+    console.log(token);
+    
     const [seusHabitos, setSeusHabitos] = useState('');
     const [addHabito, setAddHabito] = useState(false);
     function toggleAdd() {

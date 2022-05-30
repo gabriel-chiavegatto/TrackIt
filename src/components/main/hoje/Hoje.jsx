@@ -1,22 +1,30 @@
 import Footer from "../Footer";
 import Header from "../Header";
 import styled from 'styled-components';
-
+import 'dayjs/locale/pt-br';
+import dayjs from 'dayjs';
 import DadosDoHabito from './DadosDoHabito';
-import Markdown from './Markdown';
+import { useContext } from "react";
+import ConfigContext from "../../../context/ConfigContext";
 
-export default function Hoje({token}) {
+export default function Hoje() {
+
+    const {token} = useContext(ConfigContext);
+    console.log('token aqui = ', token);
+
+    const day = dayjs().locale('pt-br').format('dddd, DD/MM');
+    const today = dayjs().locale('pt-br').format('dddd');
     return (
         <>
             <Header />
             <Container>
                 <header>
-                    <h1>weekday, dia/mes</h1>
+                    <h1>{day}</h1>
                     <h2>xxx habitos concluídos</h2>
                 </header>
                 <section>
-                    <DadosDoHabito />
-                    <Markdown />
+                    <DadosDoHabito token={token} />
+                    
                 </section>
             </Container>
             <Footer />
@@ -38,15 +46,5 @@ const Container = styled.main`
             line-height: 22px;
             color: #BABABA;
         }
-    }
-    section{
-        margin: 0 0 10px 18px;
-        width: 340px;
-        height: 94px;
-        background: #FFFFFF;
-        border-radius: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }    
 `;
