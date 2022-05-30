@@ -8,9 +8,9 @@ import SeuHabito from "./SeuHabito";
 import { useContext } from "react";
 import ConfigContext from "../../../context/ConfigContext";
 
-export default function Habitos({token}) {
+export default function Habitos() {
 
-    // const {token} = useContext(ConfigContext);
+    const {token} = useContext(ConfigContext);
     const [seusHabitos, setSeusHabitos] = useState('');
     const [addHabito, setAddHabito] = useState(false);
     function toggleAdd() {

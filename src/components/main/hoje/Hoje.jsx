@@ -1,7 +1,9 @@
 import Footer from "../Footer";
 import Header from "../Header";
 import styled from 'styled-components';
-import Vector from '../../../assets/images/vector.png';
+
+import DadosDoHabito from './DadosDoHabito';
+import Markdown from './Markdown';
 
 export default function Hoje({token}) {
     return (
@@ -13,12 +15,8 @@ export default function Hoje({token}) {
                     <h2>xxx habitos concluídos</h2>
                 </header>
                 <section>
-                    <DadosDoHabito>
-                        <h3>Tal hábito aqui</h3>
-                        <p>Sequencia: xx</p>
-                        <p>Recorde: xx</p>
-                    </DadosDoHabito>
-                    <Check><img src={Vector} alt="vector" /></Check>
+                    <DadosDoHabito />
+                    <Markdown />
                 </section>
             </Container>
             <Footer />
@@ -51,28 +49,4 @@ const Container = styled.main`
         justify-content: space-between;
         align-items: center;
     }    
-`;
-const DadosDoHabito = styled.div`
-    margin-left: 15px;
-    h3{
-        font-size: 19.976px;
-        line-height: 25px;
-        color: #666666;
-    }
-    p{
-        font-size: 12.976px;
-        line-height: 16px;
-        color: #666666;
-    }
-`;
-const Check = styled.div`
-    width: 69px;
-    height: 69px;
-    background: #EBEBEB;
-    border: 1px solid #E7E7E7;
-    border-radius: 5px;
-    margin-right: 13px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
