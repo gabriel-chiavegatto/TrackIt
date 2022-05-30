@@ -4,28 +4,48 @@ import styled from 'styled-components';
 import 'dayjs/locale/pt-br';
 import dayjs from 'dayjs';
 import DadosDoHabito from './DadosDoHabito';
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ConfigContext from "../../../context/ConfigContext";
+import axios from "axios";
+import Loading from '../../Loading';
 
 export default function Hoje() {
 
-    const {token} = useContext(ConfigContext);
+    const day = dayjs().locale('pt-br').format('dddd, DD/MM');
+    const [tarefas, setTarefas] = useState(false);
+    const { token } = useContext(ConfigContext);
     console.log('token aqui = ', token);
 
-    const day = dayjs().locale('pt-br').format('dddd, DD/MM');
-    const today = dayjs().locale('pt-br').format('dddd');
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    useEffect(() => {
+        const promise = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today', config);
+        promise.then(resposta => {
+            setTarefas(resposta.data);
+            console.log(resposta.data);
+        });
+        promise.catch(erro => alert('Erro ao consultar a API', erro))
+    }, []);
+
+    console.log(tarefas);
     return (
         <>
             <Header />
             <Container>
                 <header>
                     <h1>{day}</h1>
-                    <h2>xxx habitos concluídos</h2>
+                    <h2>0 habitos concluídos</h2>
                 </header>
-                <section>
-                    <DadosDoHabito token={token} />
-                    
-                </section>
+                {(tarefas !== false) ?
+                    (tarefas.map(tarefa => {
+                        return (<DadosDoHabito id={tarefa.id} name={tarefa.name} done={tarefa.done} currentSequence={tarefa.currentSequence} highestSequence={tarefa.highestSequence} />)
+                    }))
+                    : <Loading />
+                }
             </Container>
             <Footer />
         </>

@@ -18,7 +18,7 @@ export default function Login({setToken}) {
         promisse.then(resposta=>{
             console.log(resposta);
             setToken(resposta.data.token);
-            navigate('/habitos');
+            navigate('/hoje');
         });
         promisse.catch(resposta=>alert('POR FAVOR PREENCHA OS DADOS CORRETAMENTE'));
     }

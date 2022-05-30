@@ -3,24 +3,15 @@ import Vector from '../../../assets/images/vector.png';
 import {useState , useEffect} from 'react';
 import axios from 'axios';
 
-export default function DadosDohabito({token}) {
+export default function DadosDohabito(props) {
 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-
-    useEffect(()=>{
-        const promise = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today', config);
-    },[]);
-
+    const {id, name, done,currentSequence, highestSequence} = props
     return (
         <Container>
             <Dados>
-                <h3>Tal hábito aqui</h3>
-                <p>Sequencia: xx</p>
-                <p>Recorde: xx</p>
+                <h3>{name}</h3>
+                <p>Sequencia: {currentSequence}</p>
+                <p>Recorde: {highestSequence}</p>
             </Dados>
             <Check >
                 <img src={Vector} alt="vector" />
