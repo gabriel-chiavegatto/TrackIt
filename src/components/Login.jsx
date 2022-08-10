@@ -1,14 +1,18 @@
 import Logo from '../assets/images/logo.png';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import ConfigContext from '../context/ConfigContext';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-export default function Login({setToken}) {
+export default function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {setToken, setImageProfile} = useContext(ConfigContext);
+
+
     function logar() {
         const form = {
             email: email,
@@ -18,6 +22,7 @@ export default function Login({setToken}) {
         promisse.then(resposta=>{
             console.log(resposta);
             setToken(resposta.data.token);
+            setImageProfile(resposta.data.image);
             navigate('/hoje');
         });
         promisse.catch(resposta=>alert('POR FAVOR PREENCHA OS DADOS CORRETAMENTE'));

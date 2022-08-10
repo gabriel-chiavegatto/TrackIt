@@ -10,16 +10,17 @@ import ConfigContext from '../context/ConfigContext';
 
 export default function App() {
     const [token, setToken] = useState('');
-    
+    const [imageProfile, setImageProfile] = useState('');
+
     return (
-        <ConfigContext.Provider value={{ token, setToken }}>
+        <ConfigContext.Provider value={{ token, setToken, imageProfile, setImageProfile }}>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<Login setToken={setToken} />} />
+                    <Route path='/' element={<Login />} />
                     <Route path='/cadastro' element={<Cadastro />} />
                     <Route path='/habitos' element={<Habitos />} />
                     <Route path='/hoje' element={<Hoje />} />
-                    <Route path='/historico' element={<Historico/>} />
+                    <Route path='/historico' element={<Historico />} />
                 </Routes>
             </BrowserRouter>
         </ConfigContext.Provider>

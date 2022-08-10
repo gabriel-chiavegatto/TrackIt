@@ -3,6 +3,7 @@ import Header from "../Header";
 import styled from 'styled-components';
 import 'dayjs/locale/pt-br';
 import dayjs from 'dayjs';
+import { useNavigate } from "react-router-dom";
 import DadosDoHabito from './DadosDoHabito';
 import { useContext, useEffect, useState } from "react";
 import ConfigContext from "../../../context/ConfigContext";
@@ -10,10 +11,10 @@ import axios from "axios";
 import Loading from '../../Loading';
 
 export default function Hoje() {
-
+    const navigate = useNavigate();
     const day = dayjs().locale('pt-br').format('dddd, DD/MM');
     const [tarefas, setTarefas] = useState(false);
-    const { token } = useContext(ConfigContext);
+    const { token, imageProfile } = useContext(ConfigContext);
     console.log('token aqui = ', token);
 
     const config = {
@@ -28,13 +29,17 @@ export default function Hoje() {
             setTarefas(resposta.data);
             console.log(resposta.data);
         });
-        promise.catch(erro => alert('Erro ao consultar a API', erro))
+        promise.catch(erro => {
+            alert('Por favor faça login novamente');
+            console.log('API ERROR: ',erro);
+            navigate("/")
+        });
     }, []);
 
     console.log(tarefas);
     return (
         <>
-            <Header />
+            <Header foto={imageProfile}/>
             <Container>
                 <header>
                     <h1>{day}</h1>

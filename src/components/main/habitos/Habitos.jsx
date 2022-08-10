@@ -6,13 +6,15 @@ import axios from "axios";
 import NovoHabito from "./NovoHabito";
 import SeuHabito from "./SeuHabito";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import ConfigContext from "../../../context/ConfigContext";
 
-export default function Habitos() {
+export default function Habitos(props) {
 
-    const {token} = useContext(ConfigContext);
+    const { token, imageProfile } = useContext(ConfigContext);
     console.log(token);
-    
+
+    const navigate = useNavigate();
     const [seusHabitos, setSeusHabitos] = useState('');
     const [addHabito, setAddHabito] = useState(false);
     function toggleAdd() {
@@ -32,22 +34,25 @@ export default function Habitos() {
             setSeusHabitos(resposta.data);
             console.log(seusHabitos);
         });
-        promise.catch(resposta => alert('ERRO NO GET'));
+        promise.catch(resposta => {
+            alert('Por favor faça login novamente');
+            navigate("/")
+        });
     }, []);
 
     return (
         <>
-            <Header />
+            <Header foto={imageProfile}/>
             <Container>
                 <header>
                     <h1>Meus hábitos</h1>
                     <Add onClick={toggleAdd}><p>+</p></Add>
                 </header>
-                {(addHabito) ? (<NovoHabito toggleAdd={toggleAdd} token={token} setSeusHabitos={setSeusHabitos}/>) : <></>}
+                {(addHabito) ? (<NovoHabito toggleAdd={toggleAdd} token={token} setSeusHabitos={setSeusHabitos} />) : <></>}
 
                 {(seusHabitos.length > 0) ?
                     seusHabitos.map((item) => {
-                        return (<SeuHabito token={token} setSeusHabitos={setSeusHabitos} name={item.name} days={item.days} id={item.id} key={item.id}/>)
+                        return (<SeuHabito token={token} setSeusHabitos={setSeusHabitos} name={item.name} days={item.days} id={item.id} key={item.id} />)
                     }) :
                     <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
                 }

@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import Perfil from '../../assets/images/bob.png'
 
-export default function Header(){
+export default function Header(props){
     return (
         <Topo>
             <h1>TrackIt</h1>
-            <img src={Perfil} alt="perfil" />
+            <img src={props.foto} alt="perfil" />
         </Topo>
     )
 }
