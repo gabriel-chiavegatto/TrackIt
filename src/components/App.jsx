@@ -9,8 +9,10 @@ import ConfigContext from '../context/ConfigContext';
 
 
 export default function App() {
-    const [token, setToken] = useState('');
-    const [imageProfile, setImageProfile] = useState('');
+    const tokenLocalStorage = localStorage.getItem("token");
+    const imageLocalStorage = localStorage.getItem("image");
+    const [token, setToken] = useState(tokenLocalStorage);
+    const [imageProfile, setImageProfile] = useState(imageLocalStorage);
 
     return (
         <ConfigContext.Provider value={{ token, setToken, imageProfile, setImageProfile }}>

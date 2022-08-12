@@ -2,10 +2,12 @@ import styled from 'styled-components';
 import Vector from '../../../assets/images/vector.png';
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import ConfigContext from '../../../context/ConfigContext';
 
 export default function DadosDohabito(props) {
 
+    const navigate = useNavigate();
     const { token } = useContext(ConfigContext);
 
     const config = {
@@ -13,40 +15,29 @@ export default function DadosDohabito(props) {
             Authorization: `Bearer ${token}`
         }
     }
-    
+
     const { id, name, done, currentSequence, highestSequence } = props;
-    
+
     const [colorCheck, setColorCheck] = useState('#EBEBEB;');
 
-    useEffect(()=>{
-        if(done == true){
+    useEffect(() => {
+        if (done == true) {
             setColorCheck("#8FC549");
         }
-    },[done])
+    }, [])
 
     function checkUncheck() {
-        if (!done) {
-            setColorCheck("#f1de6d");
-            const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, token, config);
-            promisse.then(res => {
-                console.log("confirmado")
-                setColorCheck("#8FC549")
-            });
-            promisse.catch(res => {
-                console.log(res)
-                setColorCheck("#EBEBEB");
-            });
-        } else{
-            setColorCheck("#f1de6d");
+        setColorCheck("#f1de6d");
+        const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, token, config);
+        promisse.then(res => {
+            console.log("confirmado")
+            setColorCheck("#8FC549")
+        });
+        promisse.catch(res => {
             const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, token, config)
-            .then(res=>{
-                setColorCheck("#EBEBEB")
-            })
-            .catch(res=>{
-                setColorCheck("#8FC549")
-            })
-            
-        }
+                .then(res => { setColorCheck("#EBEBEB") })
+                .catch(res => { window.location.reload() });
+        });
     }
 
     return (

@@ -10,7 +10,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const {setToken, setImageProfile} = useContext(ConfigContext);
+    const { setToken, setImageProfile } = useContext(ConfigContext);
 
 
     function logar() {
@@ -19,13 +19,15 @@ export default function Login() {
             password: password
         }
         const promisse = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', form);
-        promisse.then(resposta=>{
+        promisse.then(resposta => {
             console.log(resposta);
             setToken(resposta.data.token);
             setImageProfile(resposta.data.image);
+            localStorage.setItem("token", resposta.data.token);
+            localStorage.setItem("image", resposta.data.image);
             navigate('/hoje');
         });
-        promisse.catch(resposta=>alert('POR FAVOR PREENCHA OS DADOS CORRETAMENTE'));
+        promisse.catch(resposta => alert('POR FAVOR PREENCHA OS DADOS CORRETAMENTE'));
     }
 
     return (
