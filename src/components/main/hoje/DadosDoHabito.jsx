@@ -1,11 +1,54 @@
 import styled from 'styled-components';
 import Vector from '../../../assets/images/vector.png';
-import {useState , useEffect} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import ConfigContext from '../../../context/ConfigContext';
 
 export default function DadosDohabito(props) {
 
-    const {id, name, done,currentSequence, highestSequence} = props
+    const { token } = useContext(ConfigContext);
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    
+    const { id, name, done, currentSequence, highestSequence } = props;
+    
+    const [colorCheck, setColorCheck] = useState('#EBEBEB;');
+
+    useEffect(()=>{
+        if(done == true){
+            setColorCheck("#8FC549");
+        }
+    },[done])
+
+    function checkUncheck() {
+        if (!done) {
+            setColorCheck("#f1de6d");
+            const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, token, config);
+            promisse.then(res => {
+                console.log("confirmado")
+                setColorCheck("#8FC549")
+            });
+            promisse.catch(res => {
+                console.log(res)
+                setColorCheck("#EBEBEB");
+            });
+        } else{
+            setColorCheck("#f1de6d");
+            const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, token, config)
+            .then(res=>{
+                setColorCheck("#EBEBEB")
+            })
+            .catch(res=>{
+                setColorCheck("#8FC549")
+            })
+            
+        }
+    }
+
     return (
         <Container>
             <Dados>
@@ -13,14 +56,14 @@ export default function DadosDohabito(props) {
                 <p>Sequencia: {currentSequence}</p>
                 <p>Recorde: {highestSequence}</p>
             </Dados>
-            <Check >
+            <Check onClick={checkUncheck} colorCheck={colorCheck}>
                 <img src={Vector} alt="vector" />
             </Check >
         </Container>
     )
 }
 const Container = styled.section`
-    margin: 0 0 10px 18px;
+    margin: 0 18px 10px 18px;
     width: 340px;
     height: 94px;
     background: #FFFFFF;
@@ -45,7 +88,7 @@ const Dados = styled.div`
 const Check = styled.div`
     width: 69px;
     height: 69px;
-    background: #EBEBEB;
+    background:  ${props => props.colorCheck} ;
     border: 1px solid #E7E7E7;
     border-radius: 5px;
     margin-right: 13px;
