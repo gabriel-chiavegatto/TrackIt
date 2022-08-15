@@ -8,6 +8,7 @@ import SeuHabito from "./SeuHabito";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfigContext from "../../../context/ConfigContext";
+import ResponsiveMain from "../ResponsiveMain.jsx";
 
 export default function Habitos(props) {
 
@@ -42,20 +43,22 @@ export default function Habitos(props) {
 
     return (
         <>
-            <Header foto={imageProfile}/>
+            <Header foto={imageProfile} />
             <Container>
-                <header>
-                    <h1>Meus hábitos</h1>
-                    <Add onClick={toggleAdd}><p>+</p></Add>
-                </header>
-                {(addHabito) ? (<NovoHabito toggleAdd={toggleAdd} token={token} setSeusHabitos={setSeusHabitos} />) : <></>}
+                <ResponsiveMain>
+                    <header>
+                        <h1>Meus hábitos</h1>
+                        <Add onClick={toggleAdd}><p>+</p></Add>
+                    </header>
+                    {(addHabito) ? (<NovoHabito toggleAdd={toggleAdd} token={token} setSeusHabitos={setSeusHabitos} />) : <></>}
 
-                {(seusHabitos.length > 0) ?
-                    seusHabitos.map((item) => {
-                        return (<SeuHabito token={token} setSeusHabitos={setSeusHabitos} name={item.name} days={item.days} id={item.id} key={item.id} />)
-                    }) :
-                    <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
-                }
+                    {(seusHabitos.length > 0) ?
+                        seusHabitos.map((item) => {
+                            return (<SeuHabito token={token} setSeusHabitos={setSeusHabitos} name={item.name} days={item.days} id={item.id} key={item.id} />)
+                        }) :
+                        <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
+                    }
+                </ResponsiveMain>
             </Container>
             <Footer />
         </>
@@ -63,7 +66,9 @@ export default function Habitos(props) {
 }
 const Container = styled.main`
     width: 100%;
-    padding: 98px 0 101px 0;
+    padding: 98px 18px 101px 18px;
+    display: flex;
+    justify-content: center;
     
     header{
         display: flex;
@@ -83,8 +88,7 @@ const Container = styled.main`
         background: #FFFFFF;
         border-radius: 5px;
         width: 340px;
-        margin-left: 18px;
-        margin-bottom: 10px;
+        margin: 0 18px 10px 18px;
         padding: 18px 18px 15px 19px;
 
         input{

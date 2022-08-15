@@ -9,13 +9,16 @@ import { useContext, useEffect, useState } from "react";
 import ConfigContext from "../../../context/ConfigContext";
 import axios from "axios";
 import Loading from '../../Loading';
+import ResponsiveMain from "../ResponsiveMain.jsx";
 
 export default function Hoje() {
     const navigate = useNavigate();
     const day = dayjs().locale('pt-br').format('dddd, DD/MM');
     const [tarefas, setTarefas] = useState(false);
     const { token, imageProfile } = useContext(ConfigContext);
-    console.log('token aqui = ', token);
+    // console.log('token aqui = ', token);
+    const [habitosConcluidos, setMsgConcluidos] = useState(false);
+    const [toRefreshPage, setRefreshPage] = useState(false);
 
     const config = {
         headers: {
@@ -27,30 +30,55 @@ export default function Hoje() {
         const promise = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today', config);
         promise.then(resposta => {
             setTarefas(resposta.data);
-            console.log(resposta.data);
+            // console.log(resposta.data);
+            habitosPorCento(resposta.data);
         });
         promise.catch(erro => {
             alert('Por favor faça login novamente');
             console.log('API ERROR: ',erro);
             navigate("/")
         });
-    }, []);
 
-    console.log(tarefas);
+    }, [toRefreshPage]);
+    // console.log(tarefas);
+
+    function habitosPorCento(lst){
+        if(lst.length === 0){
+            setMsgConcluidos("Como assim você não tem nenhum hábito hoje?")
+            return habitosConcluidos;
+        }
+        const feitos = lst.filter(item=>{return item.done});
+        const porCento = (feitos.length/lst.length)*100;
+        // const porCento = lst.length;
+        setMsgConcluidos(`${porCento}% de hábitos concluídos`);
+        return habitosConcluidos;
+    }
+    function refreshPage(){
+        if(toRefreshPage){
+            setRefreshPage(false)
+        }else{
+            setRefreshPage(true)
+        }
+    }
+
     return (
         <>
-            <Header foto={imageProfile}/>
+            <Header foto={imageProfile} />
             <Container>
-                <header>
-                    <h1>{day}</h1>
-                    <h2>0 habitos concluídos</h2>
-                </header>
-                {(tarefas !== false) ?
-                    (tarefas.map(tarefa => {
-                        return (<DadosDoHabito id={tarefa.id} name={tarefa.name} done={tarefa.done} currentSequence={tarefa.currentSequence} highestSequence={tarefa.highestSequence} />)
-                    }))
-                    : <Loading />
-                }
+                <ResponsiveMain>
+                    <header>
+                        <h1>{day}</h1>
+                       {(habitosConcluidos)?
+                        <h2>{habitosConcluidos}</h2>
+                        :  <h2>Carregando...</h2>}
+                    </header>
+                    {(tarefas !== false) ?
+                        (tarefas.map(tarefa => {
+                            return (<DadosDoHabito key={tarefa.id} id={tarefa.id} name={tarefa.name} done={tarefa.done} currentSequence={tarefa.currentSequence} highestSequence={tarefa.highestSequence} refreshPage={refreshPage}/>)
+                        }))
+                        : <Loading />
+                    }
+                </ResponsiveMain>
             </Container>
             <Footer />
         </>
@@ -58,7 +86,9 @@ export default function Hoje() {
 }
 const Container = styled.main`
     width: 100%;
-    padding: 98px 0 101px 0;
+    padding: 98px 18px 101px 18px;
+    display: flex;
+    justify-content: center;
     header{
         padding: 0 0 28px 18px;
         h1{

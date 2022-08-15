@@ -16,7 +16,7 @@ export default function DadosDohabito(props) {
         }
     }
 
-    const { id, name, done, currentSequence, highestSequence } = props;
+    const { id, name, done, currentSequence, highestSequence, refreshPage } = props;
 
     const [colorCheck, setColorCheck] = useState('#EBEBEB;');
 
@@ -30,12 +30,13 @@ export default function DadosDohabito(props) {
         setColorCheck("#f1de6d");
         const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, token, config);
         promisse.then(res => {
-            console.log("confirmado")
-            setColorCheck("#8FC549")
+            setColorCheck("#8FC549");
+            console.log("confirmado");
+            refreshPage();
         });
         promisse.catch(res => {
             const promisse = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, token, config)
-                .then(res => { setColorCheck("#EBEBEB") })
+                .then(res => { setColorCheck("#EBEBEB"); refreshPage(); })
                 .catch(res => { window.location.reload() });
         });
     }
